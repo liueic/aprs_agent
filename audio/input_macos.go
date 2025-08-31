@@ -29,8 +29,8 @@ type macOSInput struct {
 	deviceName string
 }
 
-// NewmacOSInput 创建新的macOS音频输入
-func NewmacOSInput(cfg *config.Config, devices DeviceManagerInterface) (*macOSInput, error) {
+// newMacOSInput 创建新的macOS音频输入
+func newMacOSInput(cfg *config.Config, devices DeviceManagerInterface) (AudioInput, error) {
 	input := &macOSInput{
 		config:    cfg,
 		devices:   devices,
@@ -276,4 +276,9 @@ func (i *macOSInput) GetBuffer() []byte {
 // GetConfig 获取当前配置
 func (i *macOSInput) GetConfig() *config.Config {
 	return i.config
+}
+
+// 为macOS平台提供通用音频输入输出的存根
+func newGenericInput(cfg *config.Config, devices DeviceManagerInterface) (AudioInput, error) {
+	return nil, fmt.Errorf("通用音频输入在macOS上不可用，请使用macOS专用版本")
 }

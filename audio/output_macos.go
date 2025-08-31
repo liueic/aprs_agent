@@ -29,8 +29,8 @@ type macOSOutput struct {
 	deviceName string
 }
 
-// NewmacOSOutput 创建新的macOS音频输出
-func NewmacOSOutput(cfg *config.Config, devices DeviceManagerInterface) (*macOSOutput, error) {
+// newMacOSOutput 创建新的macOS音频输出
+func newMacOSOutput(cfg *config.Config, devices DeviceManagerInterface) (AudioOutput, error) {
 	output := &macOSOutput{
 		config:    cfg,
 		devices:   devices,
@@ -270,4 +270,9 @@ func (o *macOSOutput) applyVolume(data []byte) {
 		data[j] = byte(adjustedSample & 0xFF)
 		data[j+1] = byte((adjustedSample >> 8) & 0xFF)
 	}
+}
+
+// 为macOS平台提供通用音频输出的存根
+func newGenericOutput(cfg *config.Config, devices DeviceManagerInterface) (AudioOutput, error) {
+	return nil, fmt.Errorf("通用音频输出在macOS上不可用，请使用macOS专用版本")
 }

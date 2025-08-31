@@ -44,9 +44,15 @@ type DeviceManager struct {
 func NewDeviceManager() (DeviceManagerInterface, error) {
 	// 在macOS上使用专用管理器
 	if runtime.GOOS == "darwin" {
-		return NewmacOSDeviceManager()
+		return newMacOSDeviceManager()
 	}
 
+	// 在Linux上使用专用管理器
+	if runtime.GOOS == "linux" {
+		return newLinuxDeviceManager()
+	}
+
+	// 其他系统使用malgo
 	context, err := malgo.InitContext(nil, malgo.ContextConfig{}, nil)
 	if err != nil {
 		return nil, fmt.Errorf("初始化音频上下文失败: %w", err)

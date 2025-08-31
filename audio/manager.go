@@ -73,33 +73,35 @@ func NewManager(cfg *config.Config) (*Manager, error) {
 		isRunning:     false,
 	}
 
-	// 创建音频输入
+	// 根据平台创建音频输入输出
 	if runtime.GOOS == "darwin" {
-		input, err := NewmacOSInput(cfg, devices)
+		// macOS平台
+		input, err := newMacOSInput(cfg, devices)
 		if err != nil {
 			cancel()
 			return nil, fmt.Errorf("创建macOS音频输入失败: %w", err)
 		}
 		manager.input = input
 
-		output, err := NewmacOSOutput(cfg, devices)
+		output, err := newMacOSOutput(cfg, devices)
 		if err != nil {
 			cancel()
 			return nil, fmt.Errorf("创建macOS音频输出失败: %w", err)
 		}
 		manager.output = output
 	} else {
-		input, err := NewInput(cfg, devices)
+		// 其他平台使用通用实现
+		input, err := newGenericInput(cfg, devices)
 		if err != nil {
 			cancel()
-			return nil, fmt.Errorf("创建音频输入失败: %w", err)
+			return nil, fmt.Errorf("创建通用音频输入失败: %w", err)
 		}
 		manager.input = input
 
-		output, err := NewOutput(cfg, devices)
+		output, err := newGenericOutput(cfg, devices)
 		if err != nil {
 			cancel()
-			return nil, fmt.Errorf("创建音频输出失败: %w", err)
+			return nil, fmt.Errorf("创建通用音频输出失败: %w", err)
 		}
 		manager.output = output
 	}

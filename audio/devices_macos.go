@@ -1,5 +1,4 @@
 //go:build darwin
-// +build darwin
 
 package audio
 
@@ -17,8 +16,8 @@ type macOSDeviceManager struct {
 	devices []DeviceInfo
 }
 
-// NewmacOSDeviceManager 创建新的macOS设备管理器
-func NewmacOSDeviceManager() (*macOSDeviceManager, error) {
+// newMacOSDeviceManager 创建新的macOS设备管理器
+func newMacOSDeviceManager() (DeviceManagerInterface, error) {
 	manager := &macOSDeviceManager{
 		devices: []DeviceInfo{},
 	}
